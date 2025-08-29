@@ -8,7 +8,6 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -39,7 +38,7 @@ public class InGameHudMixin {
         int hotbarY = scaledHeight - HOTBAR_HEIGHT - 1;
         
         PlayerEntity player = this.client.player;
-        int selectedSlot = player.getInventory().selectedSlot;
+        int selectedSlot = player.getInventory().getSelectedSlot();
         
         for (int i = 0; i < 9; i++) {
             if (config.hideOnActiveSlot && i == selectedSlot) {
@@ -101,48 +100,47 @@ public class InGameHudMixin {
     
     private void renderKeybindText(DrawContext drawContext, String text, int slotX, int slotY, KeyOverlayConfig config) {
         TextRenderer textRenderer = this.client.textRenderer;
-        MatrixStack matrices = drawContext.getMatrices();
         
-        matrices.push();
-        matrices.scale(config.textScale, config.textScale, 1.0f);
+        int textWidth = (int)(textRenderer.getWidth(text) * config.textScale);
+        int textHeight = (int)(textRenderer.fontHeight * config.textScale);
         
-        float scaledSlotX = slotX / config.textScale;
-        float scaledSlotY = slotY / config.textScale;
-        float scaledSlotSize = SLOT_SIZE / config.textScale;
-        
-        int textWidth = textRenderer.getWidth(text);
-        int textHeight = textRenderer.fontHeight;
-        
-        float textX, textY;
+        int textX, textY;
         
         switch (config.position) {
             case TOP_LEFT:
-                textX = scaledSlotX + (config.offsetX / config.textScale);
-                textY = scaledSlotY + (config.offsetY / config.textScale);
+                textX = slotX + config.offsetX;
+                textY = slotY + config.offsetY;
                 break;
             case TOP_RIGHT:
-                textX = scaledSlotX + scaledSlotSize - textWidth + (config.offsetX / config.textScale);
-                textY = scaledSlotY + (config.offsetY / config.textScale);
+                textX = slotX + SLOT_SIZE - textWidth + config.offsetX;
+                textY = slotY + config.offsetY;
                 break;
             case BOTTOM_LEFT:
-                textX = scaledSlotX + (config.offsetX / config.textScale);
-                textY = scaledSlotY + scaledSlotSize - textHeight + (config.offsetY / config.textScale);
+                textX = slotX + config.offsetX;
+                textY = slotY + SLOT_SIZE - textHeight + config.offsetY;
                 break;
             case BOTTOM_RIGHT:
             default:
-                textX = scaledSlotX + scaledSlotSize - textWidth + (config.offsetX / config.textScale);
-                textY = scaledSlotY + scaledSlotSize - textHeight + (config.offsetY / config.textScale);
+                textX = slotX + SLOT_SIZE - textWidth + config.offsetX;
+                textY = slotY + SLOT_SIZE - textHeight + config.offsetY;
                 break;
         }
         
         if (config.showBackground) {
             int bgColor = (config.backgroundOpacity << 24) | (config.backgroundColor & 0xFFFFFF);
-            drawContext.fill((int)(textX - 1), (int)(textY - 1), (int)(textX + textWidth + 1), (int)(textY + textHeight + 1), bgColor);
+            drawContext.fill(textX - 1, textY - 1, textX + textWidth + 1, textY + textHeight + 1, bgColor);
         }
         
         int color = 0xFF000000 | (config.textColor & 0xFFFFFF);
-        drawContext.drawText(textRenderer, text, (int)textX, (int)textY, color, false);
         
-        matrices.pop();
+        if (config.textScale != 1.0f) {
+            drawContext.getMatrices().pushMatrix();
+            drawContext.getMatrices().translate(textX, textY);
+            drawContext.getMatrices().scale(config.textScale, config.textScale);
+            drawContext.drawText(textRenderer, text, 0, 0, color, false);
+            drawContext.getMatrices().popMatrix();
+        } else {
+            drawContext.drawText(textRenderer, text, textX, textY, color, false);
+        }
     }
 }

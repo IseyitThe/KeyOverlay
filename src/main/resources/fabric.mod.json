@@ -9,7 +9,6 @@
   "license": "MIT",
   "icon": "assets/keyoverlay/icon.png",
   "environment": "client",
-  "accessWidener": "keyoverlay.accesswidener",
   "entrypoints": {
     "client": [
       "me.seyit.KeyOverlay"
@@ -24,7 +23,7 @@
   "depends": {
     "fabricloader": "*",
     "fabric-api": "*",
-    "minecraft": ">=1.21 <=1.21.4"
+    "minecraft": ">=1.21.5"
   },
   "suggests": {
     "modmenu": "*",
