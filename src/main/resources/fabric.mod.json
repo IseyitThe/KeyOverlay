@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "keyoverlay",
+  "version": "${version}",
+  "name": "Key Overlay",
+  "description": "Displays keybinds on hotbar slots",
+  "authors": ["Seyit"],
+  "contact": {
+    "homepage": "https://github.com/IseyitThe/KeyOverlay"
+  },
+  "license": "MIT",
+  "icon": "assets/keyoverlay/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "me.seyit.KeyOverlay"
+    ],
+    "modmenu": [
+      "me.seyit.config.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "keyoverlay.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": "*",
+    "fabric-api": "*",
+    "minecraft": "1.20.x"
+  },
+  "suggests": {
+    "modmenu": "*",
+    "cloth-config": "*"
+  }
+}
