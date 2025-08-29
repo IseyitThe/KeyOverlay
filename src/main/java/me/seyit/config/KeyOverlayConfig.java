@@ -15,11 +15,11 @@ public class KeyOverlayConfig {
         TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT
     }
     
-    public Position position = Position.TOP_RIGHT;
+    public Position position = Position.TOP_LEFT;
     public int textColor = 0xFFFFFF;
     public int offsetX = 0;
     public int offsetY = 0;
-    public float textScale = 1.0f;
+    public float textScale = 0.9f;
     public boolean showBackground = false;
     public int backgroundColor = 0x000000;
     public int backgroundOpacity = 128;
