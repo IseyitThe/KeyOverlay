@@ -5,12 +5,11 @@
   "name": "Key Overlay",
   "description": "Displays keybinds on hotbar slots",
   "authors": ["Seyit"],
-  "contact": {
-    "homepage": "https://github.com/IseyitThe/KeyOverlay"
-  },
+  "contact": {},
   "license": "MIT",
   "icon": "assets/keyoverlay/icon.png",
   "environment": "client",
+  "accessWidener": "keyoverlay.accesswidener",
   "entrypoints": {
     "client": [
       "me.seyit.KeyOverlay"
@@ -25,7 +24,7 @@
   "depends": {
     "fabricloader": "*",
     "fabric-api": "*",
-    "minecraft": "1.20.x"
+    "minecraft": "~1.21.4"
   },
   "suggests": {
     "modmenu": "*",

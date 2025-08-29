@@ -7,8 +7,9 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -26,7 +27,7 @@ public class InGameHudMixin {
     private static final int HOTBAR_HEIGHT = 22;
     
     @Inject(method = "renderHotbar", at = @At("TAIL"))
-    private void renderKeybindOverlay(float tickDelta, DrawContext context, CallbackInfo ci) {
+    private void renderKeybindOverlay(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         if (this.client.player == null) return;
         
         KeyOverlayConfig config = KeyOverlayManager.getConfig();
@@ -37,8 +38,8 @@ public class InGameHudMixin {
         int hotbarX = (scaledWidth - HOTBAR_WIDTH) / 2;
         int hotbarY = scaledHeight - HOTBAR_HEIGHT - 1;
         
-        PlayerInventory inventory = this.client.player.getInventory();
-        int selectedSlot = inventory.selectedSlot;
+        PlayerEntity player = this.client.player;
+        int selectedSlot = player.getInventory().selectedSlot;
         
         for (int i = 0; i < 9; i++) {
             if (config.hideOnActiveSlot && i == selectedSlot) {
