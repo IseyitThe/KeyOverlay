@@ -134,11 +134,11 @@ public class InGameHudMixin {
         int color = 0xFF000000 | (config.textColor & 0xFFFFFF);
         
         if (config.textScale != 1.0f) {
-            drawContext.getMatrices().pushMatrix();
-            drawContext.getMatrices().translate(textX, textY);
-            drawContext.getMatrices().scale(config.textScale, config.textScale);
+            drawContext.getMatrices().push();
+            drawContext.getMatrices().translate((float)textX, (float)textY, 0.0f);
+            drawContext.getMatrices().scale(config.textScale, config.textScale, 1.0f);
             drawContext.drawText(textRenderer, text, 0, 0, color, false);
-            drawContext.getMatrices().popMatrix();
+            drawContext.getMatrices().pop();
         } else {
             drawContext.drawText(textRenderer, text, textX, textY, color, false);
         }
